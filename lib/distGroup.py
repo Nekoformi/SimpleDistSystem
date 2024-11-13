@@ -147,6 +147,54 @@ class DistGroup(object):
         if type(buf) is DistItem:
             buf.setValue(value)
 
+    def moveContentIndex(self, targetId: str, move: int) -> bool:
+        targetItem = None
+        targetIndex = -1
+        contentLength = len(self.content)
+
+        for i in range(contentLength):
+            item = self.content[i]
+
+            if item.getUUID() == targetId:
+                targetItem = item
+                targetIndex = i
+
+                break
+
+            if type(item) is DistGroup:
+                if item.moveContentIndex(targetId, move):
+                    return True
+
+        newIndex = targetIndex + move
+
+        if targetItem == None or targetIndex < 0 or newIndex < 0 or newIndex >= contentLength:
+            return False
+
+        newContent = self.content[0:targetIndex]
+
+        newContent.extend(self.content[targetIndex + 1:contentLength])
+        newContent.insert(newIndex, targetItem)
+
+        self.content = newContent
+
+        return True
+
+    def pullContentLayer(self, targetId: str) -> Union[DistGroup, DistItem, None]:
+        for item in self.content:
+            if item.getUUID() == targetId:
+                return item
+
+            if type(item) is DistGroup:
+                buf = item.pullContentLayer(targetId)
+
+                if buf != None:
+                    item.content.remove(buf)
+                    self.content.append(buf)
+
+                    return None
+
+        return None
+
     def displayOperation(self) -> str:
         return self.operationDict.get(self.operation, '')
 

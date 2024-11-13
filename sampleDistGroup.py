@@ -41,6 +41,9 @@ testDistGroup.setDistItemConditionIndex(newDistGroupId_C, 4)
 testDistGroup.setDistItemExpressionIndex(newDistGroupId_C, 2)
 testDistGroup.setDistItemValue(newDistGroupId_C, 'piyo')
 
+testDistGroup.moveContentIndex(newDistGroupId_B, -1) # 条件一覧を並び替え
+testDistGroup.moveContentIndex(newDistGroupId_A, +1)
+
 newDistGroupId = testDistGroup.addNewDistGroup() # 新しいDistGroupを追加
 
 newDistGroup = testDistGroup.getDistContent(newDistGroupId) # IDを基にDistGroupやDistItemを取得
@@ -48,6 +51,8 @@ newDistGroup = testDistGroup.getDistContent(newDistGroupId) # IDを基にDistGro
 newDistItem = DistItem()
 
 newDistGroup.addDistItem(newDistItem) # 引数からオブジェクトを条件一覧に追加することも可能
+
+testDistGroup.pullContentLayer(newDistItem.getUUID()) # 特定のオブジェクトを親の階層へ移動
 
 print('- GET (RE) ---------------------------------------------------------------------')
 
