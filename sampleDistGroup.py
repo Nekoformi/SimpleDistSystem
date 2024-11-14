@@ -28,21 +28,32 @@ testDistGroup.setOperationIndex(TEST_OPERATION_INDEX) # 条件演算を変更
 newDistGroupId_A = testDistGroup.addNewDistItem() # 新しいDistItemを追加
 newDistGroupId_B = testDistGroup.addNewDistItem()
 newDistGroupId_C = testDistGroup.addNewDistItem()
+newDistGroupId_D = testDistGroup.addNewDistItem()
+newDistGroupId_E = testDistGroup.addNewDistItem()
 
 testDistGroup.setDistItemConditionIndex(newDistGroupId_A, 0) # IDを基にDistItemを編集
 testDistGroup.setDistItemExpressionIndex(newDistGroupId_A, 2)
 testDistGroup.setDistItemValue(newDistGroupId_A, 'hoge')
 
-testDistGroup.setDistItemConditionIndex(newDistGroupId_B, 2)
+testDistGroup.setDistItemConditionIndex(newDistGroupId_B, 1)
 testDistGroup.setDistItemExpressionIndex(newDistGroupId_B, 2)
 testDistGroup.setDistItemValue(newDistGroupId_B, 'fuga')
 
-testDistGroup.setDistItemConditionIndex(newDistGroupId_C, 4)
+testDistGroup.setDistItemConditionIndex(newDistGroupId_C, 2)
 testDistGroup.setDistItemExpressionIndex(newDistGroupId_C, 2)
 testDistGroup.setDistItemValue(newDistGroupId_C, 'piyo')
 
-testDistGroup.moveContentIndex(newDistGroupId_B, -1) # 条件一覧を並び替え
+testDistGroup.setDistItemConditionIndex(newDistGroupId_D, 3)
+testDistGroup.setDistItemExpressionIndex(newDistGroupId_D, 2)
+testDistGroup.setDistItemValue(newDistGroupId_D, 'nube')
+
+testDistGroup.setDistItemConditionIndex(newDistGroupId_E, 4)
+testDistGroup.setDistItemExpressionIndex(newDistGroupId_E, 2)
+testDistGroup.setDistItemValue(newDistGroupId_E, 'hoyo')
+
+testDistGroup.moveContentIndex(newDistGroupId_B, -1) # 条件一覧を移動
 testDistGroup.moveContentIndex(newDistGroupId_A, +1)
+testDistGroup.removeContentIndex(newDistGroupId_E) # 条件一覧を削除
 
 newDistGroupId = testDistGroup.addNewDistGroup() # 新しいDistGroupを追加
 

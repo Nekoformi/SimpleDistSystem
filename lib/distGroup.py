@@ -179,6 +179,31 @@ class DistGroup(object):
 
         return True
 
+    def removeContentIndex(self, targetId: str) -> bool:
+        targetItem = None
+        targetIndex = -1
+        contentLength = len(self.content)
+
+        for i in range(contentLength):
+            item = self.content[i]
+
+            if item.getUUID() == targetId:
+                targetItem = item
+                targetIndex = i
+
+                break
+
+            if type(item) is DistGroup:
+                if item.removeContentIndex(targetId):
+                    return True
+
+        if targetItem == None or targetIndex == -1:
+            return False
+
+        self.content.remove(targetItem)
+
+        return True
+
     def pullContentLayer(self, targetId: str) -> Union[DistGroup, DistItem, None]:
         for item in self.content:
             if item.getUUID() == targetId:
