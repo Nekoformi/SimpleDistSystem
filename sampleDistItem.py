@@ -27,8 +27,8 @@ print('Condition index: ' + str(testDistItem.getConditionIndex()) + ' → ' + st
 print('Expression index: ' + str(testDistItem.getExpressionIndex()) + ' → ' + str(TEST_EXPRESSION_INDEX) + ' (Missing index)') # 条件式の番地を取得
 print('Value: "' + testDistItem.displayValue() + '" → "' + TEST_VALUE + '"')
 
-testDistItem.setConditionIndex(TEST_CONDITION_INDEX) # 条件項目を変更
-testDistItem.setExpressionIndex(TEST_EXPRESSION_INDEX) # 条件式を変更
+testDistItem.setConditionFromDictIndex(TEST_CONDITION_INDEX) # 条件項目を変更
+testDistItem.setExpressionFromDictIndex(TEST_EXPRESSION_INDEX) # 条件式を変更
 testDistItem.setValue(TEST_VALUE) # 条件内容を変更
 
 print('- GET (RE) ---------------------------------------------------------------------')

@@ -94,7 +94,7 @@ print('- EXE 1 -----------------------------------------------------------------
 
 print('Root operation index: 0')
 
-testDistCollection.root.setOperationIndex(0)
+testDistCollection.root.setOperationFromDictIndex(0)
 
 print('Test Data A - Result: ' + str(testDistCollection.root.match(testData_A))) # 結果を表示 (1: 一致, 0: 不一致)
 print('Test Data B - Result: ' + str(testDistCollection.root.match(testData_B)))
@@ -108,7 +108,7 @@ print('- EXE 2 -----------------------------------------------------------------
 
 print('Root operation index: 1')
 
-testDistCollection.root.setOperationIndex(1)
+testDistCollection.root.setOperationFromDictIndex(1)
 
 print('Test Data A - Result: ' + str(testDistCollection.root.match(testData_A)))
 print('Test Data B - Result: ' + str(testDistCollection.root.match(testData_B)))

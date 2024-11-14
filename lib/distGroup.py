@@ -20,15 +20,33 @@ class DistGroup(object):
 
     # 内部関数
 
-    def findDictIndex(self, dict: dict, item) -> int:
-        if item in dict:
-            return list(dict.keys()).index(item)
+    def getDictIndexFromKey(self, dict: dict, key) -> int:
+        if key in dict:
+            return list(dict.keys()).index(key)
         else:
             return -1
 
-    def getItemFromDictIndex(self, dict: dict, index: int):
+    def getDictIndexFromValue(self, dict: dict, value) -> int:
+        if value in dict:
+            return list(dict.values()).index(value)
+        else:
+            return -1
+
+    def getDictKeyFromValue(self, dict: dict, value):
+        return next((item["key"] for item in dict if item["value"] == value), None)
+
+    def getDictKeyFromIndex(self, dict: dict, index: int):
         if index >= 0 and index < len(dict):
             return list(dict.keys())[index]
+        else:
+            return None
+
+    def getDictValueFromKey(self, dict: dict, key):
+        return next((item["value"] for item in dict if item["key"] == key), None)
+
+    def getDictValueFromIndex(self, dict: dict, index: int):
+        if index >= 0 and index < len(dict):
+            return list(dict.values())[index]
         else:
             return None
 
@@ -42,8 +60,11 @@ class DistGroup(object):
     def getUUID(self) -> str:
         return str(self.id)
 
+    def getOperationValue(self) -> str:
+        return self.getDictValueFromKey(self.operationDict, self.operation)
+
     def getOperationIndex(self) -> int:
-        return self.findDictIndex(self.operationDict, self.operation)
+        return self.getDictIndexFromKey(self.operationDict, self.operation)
 
     def getDistContent(self, targetId: str) -> Union[DistGroup, DistItem, None]:
         if self.getUUID() == targetId:
@@ -62,8 +83,14 @@ class DistGroup(object):
 
         return None
 
-    def setOperationIndex(self, index: int):
-        buf = self.getItemFromDictIndex(self.operationDict, index)
+    def setOperationFromDictValue(self, value: int):
+        buf = self.getDictKeyFromValue(self.operationDict, value)
+
+        if buf != None:
+            self.operation = buf
+
+    def setOperationFromDictIndex(self, index: int):
+        buf = self.getDictKeyFromIndex(self.operationDict, index)
 
         if buf != None:
             self.operation = buf
@@ -92,6 +119,14 @@ class DistGroup(object):
 
         return distItem.getUUID()
 
+    def getDistGroupOperationValue(self, targetId: str) -> str:
+        buf = self.getDistContent(targetId)
+
+        if type(buf) is DistGroup:
+            return buf.getOperationValue()
+        else:
+            return -1
+
     def getDistGroupOperationIndex(self, targetId: str) -> int:
         buf = self.getDistContent(targetId)
 
@@ -100,11 +135,27 @@ class DistGroup(object):
         else:
             return -1
 
+    def getDistItemConditionValue(self, targetId: str) -> str:
+        buf = self.getDistContent(targetId)
+
+        if type(buf) is DistItem:
+            return buf.getConditionValue()
+        else:
+            return -1
+
     def getDistItemConditionIndex(self, targetId: str) -> int:
         buf = self.getDistContent(targetId)
 
         if type(buf) is DistItem:
             return buf.getConditionIndex()
+        else:
+            return -1
+
+    def getDistItemExpressionValue(self, targetId: str) -> str:
+        buf = self.getDistContent(targetId)
+
+        if type(buf) is DistItem:
+            return buf.getExpressionValue()
         else:
             return -1
 
@@ -124,23 +175,41 @@ class DistGroup(object):
         else:
             return None
 
-    def setDistGroupOperationIndex(self, targetId: str, index: int):
+    def setDistGroupOperationFromDictValue(self, targetId: str, value: str):
         buf = self.getDistContent(targetId)
 
         if type(buf) is DistGroup:
-            buf.setOperationIndex(index)
+            buf.setOperationFromDictValue(value)
 
-    def setDistItemConditionIndex(self, targetId: str, index: int):
+    def setDistGroupOperationFromDictIndex(self, targetId: str, index: int):
+        buf = self.getDistContent(targetId)
+
+        if type(buf) is DistGroup:
+            buf.setOperationFromDictIndex(index)
+
+    def setDistItemConditionFromDictValue(self, targetId: str, value: str):
         buf = self.getDistContent(targetId)
 
         if type(buf) is DistItem:
-            buf.setConditionIndex(index)
+            buf.setConditionFromDictValue(value)
 
-    def setDistItemExpressionIndex(self, targetId: str, index: int):
+    def setDistItemConditionFromDictIndex(self, targetId: str, index: int):
         buf = self.getDistContent(targetId)
 
         if type(buf) is DistItem:
-            buf.setExpressionIndex(index)
+            buf.setConditionFromDictIndex(index)
+
+    def setDistItemExpressionFromDictValue(self, targetId: str, value: str):
+        buf = self.getDistContent(targetId)
+
+        if type(buf) is DistItem:
+            buf.setExpressionFromDictValue(value)
+
+    def setDistItemExpressionFromDictIndex(self, targetId: str, index: int):
+        buf = self.getDistContent(targetId)
+
+        if type(buf) is DistItem:
+            buf.setExpressionFromDictIndex(index)
 
     def setDistItemValue(self, targetId: str, value: str):
         buf = self.getDistContent(targetId)

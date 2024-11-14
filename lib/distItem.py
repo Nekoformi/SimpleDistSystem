@@ -29,15 +29,33 @@ class DistItem(object):
 
     # 内部関数
 
-    def findDictIndex(self, dict: dict, item) -> int:
-        if item in dict:
-            return list(dict.keys()).index(item)
+    def getDictIndexFromKey(self, dict: dict, key) -> int:
+        if key in dict:
+            return list(dict.keys()).index(key)
         else:
             return -1
 
-    def getItemFromDictIndex(self, dict: dict, index: int):
+    def getDictIndexFromValue(self, dict: dict, value) -> int:
+        if value in dict:
+            return list(dict.values()).index(value)
+        else:
+            return -1
+
+    def getDictKeyFromValue(self, dict: dict, value):
+        return next((item["key"] for item in dict if item["value"] == value), None)
+
+    def getDictKeyFromIndex(self, dict: dict, index: int):
         if index >= 0 and index < len(dict):
             return list(dict.keys())[index]
+        else:
+            return None
+
+    def getDictValueFromKey(self, dict: dict, key):
+        return next((item["value"] for item in dict if item["key"] == key), None)
+
+    def getDictValueFromIndex(self, dict: dict, index: int):
+        if index >= 0 and index < len(dict):
+            return list(dict.values())[index]
         else:
             return None
 
@@ -52,23 +70,41 @@ class DistItem(object):
     def getUUID(self) -> str:
         return str(self.id)
 
+    def getConditionValue(self) -> str:
+        return self.getDictValueFromKey(self.conditionDict, self.condition)
+
     def getConditionIndex(self) -> int:
-        return self.findDictIndex(self.conditionDict, self.condition)
+        return self.getDictIndexFromKey(self.conditionDict, self.condition)
+
+    def getExpressionValue(self) -> str:
+        return self.getDictValueFromKey(self.expressionDict, self.expression)
 
     def getExpressionIndex(self) -> int:
-        return self.findDictIndex(self.expressionDict, self.expression)
+        return self.getDictIndexFromKey(self.expressionDict, self.expression)
 
     def getValue(self) -> list[str]:
         return self.value
 
-    def setConditionIndex(self, index: int):
-        buf = self.getItemFromDictIndex(self.conditionDict, index)
+    def setConditionFromDictValue(self, value: str):
+        buf = self.getDictKeyFromValue(self.conditionDict, value)
 
         if buf != None:
             self.condition = buf
 
-    def setExpressionIndex(self, index: int):
-        buf = self.getItemFromDictIndex(self.expressionDict, index)
+    def setConditionFromDictIndex(self, index: int):
+        buf = self.getDictKeyFromIndex(self.conditionDict, index)
+
+        if buf != None:
+            self.condition = buf
+
+    def setExpressionFromDictValue(self, value: str):
+        buf = self.getDictKeyFromValue(self.expressionDict, value)
+
+        if buf != None:
+            self.expression = buf
+
+    def setExpressionFromDictIndex(self, index: int):
+        buf = self.getDictKeyFromIndex(self.expressionDict, index)
 
         if buf != None:
             self.expression = buf
