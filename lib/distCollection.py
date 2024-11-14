@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 import uuid
 
 from lib.distGroup import DistGroup
 from lib.distItem import DistItem
 
 class DistCollection(object):
+    type = 'DistCollection'
     id: uuid
     name: str
     folderPath: str
@@ -47,10 +50,28 @@ class DistCollection(object):
     def setFolderPath(self, folderPath: str):
         self.folderPath = folderPath
 
+    def importJson(self, data: dict):
+        if data['type'] != 'DistCollection':
+            return
+
+        self.id = data['id']
+        self.name = data['name']
+        self.folderPath = data['folderPath']
+
+        buf = DistGroup()
+
+        buf.importJson(data['root'])
+
+        self.root = buf
+
     def exportJson(self) -> dict:
         return {
+            'type': self.type,
             'id': str(self.id),
             'name': self.name,
             'folderPath': self.folderPath,
             'root': self.root.exportJson(),
         }
+
+    def deepCopy(self, distCollection: DistCollection):
+        self.importJson(distCollection.exportJson())

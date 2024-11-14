@@ -6,6 +6,7 @@ import uuid
 from lib.distData import DistData
 
 class DistItem(object):
+    type = 'DistItem'
     id: uuid
     condition: Literal['webUrl', 'webContent', 'fileName', 'fileExtension', 'fileContent']
     expression: Literal['eq', 'ne', 'ss', 'ns']
@@ -84,8 +85,18 @@ class DistItem(object):
     def displayValue(self) -> str:
         return ','.join(self.value)
 
+    def importJson(self, data: dict):
+        if data['type'] != 'DistItem':
+            return
+
+        self.id = data['id']
+        self.condition = data['condition']
+        self.expression = data['expression']
+        self.value = data['value']
+
     def exportJson(self) -> dict:
         return {
+            'type': self.type,
             'id': str(self.id),
             'condition': self.condition,
             'expression': self.expression,

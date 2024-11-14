@@ -8,6 +8,7 @@ from lib.distData import DistData
 from lib.distItem import DistItem
 
 class DistGroup(object):
+    type = 'DistGroup'
     id: uuid
     operation: Literal['and', 'or']
     content: list[Union[DistGroup, DistItem]]
@@ -223,6 +224,28 @@ class DistGroup(object):
     def displayOperation(self) -> str:
         return self.operationDict.get(self.operation, '')
 
+    def importJson(self, data: dict):
+        if data['type'] != 'DistGroup':
+            return
+
+        self.id = data['id']
+        self.operation = data['operation']
+        self.content = []
+
+        for item in data['content']:
+            if item['type'] == 'DistGroup':
+                buf = DistGroup()
+
+                buf.importJson(item)
+
+                self.content.append(buf)
+            elif item['type'] == 'DistItem':
+                buf = DistItem()
+
+                buf.importJson(item)
+
+                self.content.append(buf)
+
     def exportContent(self) -> list[dict]:
         content = []
 
@@ -233,6 +256,7 @@ class DistGroup(object):
 
     def exportJson(self) -> dict:
         return {
+            'type': self.type,
             'id': str(self.id),
             'operation': self.operation,
             'content': self.exportContent(),

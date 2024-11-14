@@ -42,6 +42,20 @@ print('- GET (RE) --------------------------------------------------------------
 
 printDistCollection(testDistCollection)
 
+print('- COPY -------------------------------------------------------------------------')
+
+copyDistCollection = DistCollection()
+
+copyDistCollection.deepCopy(testDistCollection) # オブジェクトをディープコピー
+
+copyDistCollection.root.content = []
+
+print('Original: ')
+printDistCollection(testDistCollection)
+
+print('Copy: ')
+printDistCollection(copyDistCollection)
+
 print('- SETUP ------------------------------------------------------------------------')
 
 testData_A = DistData()
